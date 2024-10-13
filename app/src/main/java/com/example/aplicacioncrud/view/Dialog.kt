@@ -23,7 +23,7 @@ class Dialog(
 
             1 ->
                 if (posibleId != -1)
-                    onEdit(posibleId, "CAMBIADO","Apellido", posibleNumTfn)
+                    onEdit(posibleId, posibleCambio,posibleCambio, posibleNumTfn)
 
             2 ->
                 if (posibleId != -1)

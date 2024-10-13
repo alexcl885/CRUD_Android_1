@@ -6,12 +6,13 @@ import android.widget.ImageView
 
 import androidx.appcompat.app.AppCompatActivity
 import com.example.aplicacioncrud.R
+import com.example.primeraaplicacion.logic.Client
 
 import com.example.primeraaplicacion.logic.Controller
-import com.example.primeraaplicacion.logic.interfaces.OperationInterface
 
 
-class MainActivity : AppCompatActivity() , OperationInterface {
+
+class MainActivity : AppCompatActivity() {
 
     private lateinit var myButtonAdd: ImageView
     private lateinit var myButtonUpdate: ImageView
@@ -43,13 +44,13 @@ class MainActivity : AppCompatActivity() , OperationInterface {
         myButtonDelete = findViewById(R.id.iv_delete)
         myDialog = Dialog(controller, {
                 id, name, apellidos, tfn ->
-            ClienAdd(id, name, apellidos,tfn) }
+            anadirCliente(id, name, apellidos,tfn) }
             ,{
                 id, name, apellidos, tfn ->
-                ClienUpdate(id,name, apellidos, tfn)
+                actualizarCliente(id,name, apellidos, tfn)
             },{
                 id ->
-                ClienDel(id)
+                borrarCliente(id)
             })
 
 
@@ -69,47 +70,47 @@ class MainActivity : AppCompatActivity() , OperationInterface {
 
         }
     }
+//    EN VEZ DE UTILIZAR LA INTERFAZ, CREAMOS FUNCIONES PARA AÑADIR, ACTUALIZAR O BORRAR EL CLIENTE
+    fun anadirCliente(id: Int, name: String, apellidos: String, tfn: Int){
 
-     override fun ClienAdd(id: Int, name: String, apellidos: String, tlf: Int) {
-         var msg = ""
-        val anadir = controller.clientAddController(id,name, apellidos, tlf)
+        controller.clientAddController(id, name, apellidos, tfn)
+        var msg =  "El cliente con id = $id, ha sido insertado correctamente"
 
-         msg = if (anadir)
-             "El cliente con id = $id, ha sido añadido correctamente"
-         else
-             "El cliente con id = $id, no ha sido encontrado para añadir"
+        Log.d(TAG_ADD, msg)
+        showConsoleData(msg)
+    }
 
-         Log.d(TAG_ADD, msg)//se muestra en el log lo que esta pasando
-         showConsoleData(msg)
-     }
+    fun borrarCliente(id: Int) {
+        var msg = ""
+        val delete = controller.clienDeleteController(id)  //borramos
 
-     override fun ClienDel(id: Int) {
-         var msg = ""
-         val controller = Controller()
-         val delete = controller.clienDeleteController(id)  //borramos
+        if (delete)
+            msg =  "El cliente con id = $id, ha sido eliminado correctamente"
+        else
+            msg = "El cliente con id = $id, no ha sido encontrado para eliminar"
 
-         msg = if (delete)
-             "El cliente con id = $id, ha sido eliminado correctamente"
-         else
-             "El cliente con id = $id, no ha sido encontrado para eliminar"
+        Log. d(TAG_DELETE, msg)
+        showConsoleData(msg)
 
-         Log. d(TAG_DELETE, msg)
-         showConsoleData(msg)
-     }
+    }
 
-     override fun ClienUpdate(id: Int, name: String, apellidos: String, tlf: Int) {
-         var msg =  ""
-         val controller = Controller()
-         val update = controller.clientUpdateController(id, name, apellidos, tlf)  //borramos el 2.
 
-         msg = if (update)
-             "El cliente con id = $id, ha sido actualizado correctamente"
-         else
-             "El cliente con id = $id, no ha sido encontrado para actualizar"
 
-         Log. d(TAG_UPDATE, msg)
-         showConsoleData(msg)
-     }
+    fun actualizarCliente(id: Int, name: String, apellidos:String, tfn: Int) {
+        var msg = ""
+        val update = controller.clientUpdateController(id, name, apellidos, tfn)  //borramos el 2.
+
+        if (update)
+            msg =  "El cliente con id = $id, ha sido actualizado correctamente"
+        else
+            msg = "El cliente con id = $id, no ha sido encontrado para actualizar"
+
+        Log. d(TAG_UPDATE, msg)
+        showConsoleData(msg)
+
+    }
+
+
      fun showConsoleData(msg:String){
          val controller = Controller()
 
